@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Viral Forum: Digitalus Imperialis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral / Roman Marble -->
+    <!-- Application Structure Plan:
+        1. Hero Section: Sets the tone (Old Roman) and introduces the group's purpose (Marketing/Tourism Network).
+        2. The Triumvirate of Metrics (Dashboard): Visualizes 'Why Join' using Chart.js (Network Growth, Skill Acquisition).
+        3. The XII Tables (Rules): Interactive cards that expand to explain the specific Meta rules and group decrees (No AI Spam, etc.).
+        4. The Sunday Games (Schedule): A visual timeline/bar chart showing the focus on Sunday Viral Content sharing.
+        5. Enlistment (Interactive Form): A mock "quiz" for the 3 entry questions to prepare users for the real Facebook join request.
+    -->
+    <!-- Visualization & Content Choices:
+        1. Radar Chart: To show "Ideal Gladiator Attributes" (Creativity, Strategy, etc.) - Goal: Inform users of value.
+        2. Line Chart: To project "Network Expansion" over time - Goal: Motivate users to join.
+        3. Interactive Cards: For Rules - Goal: Organize information cleanly without walls of text.
+        4. No SVG/Mermaid used. All icons are unicode or CSS shapes. Charts are Canvas.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #fdfbf7; /* Warm marble */
+            color: #2c2c2c; /* Dark Slate */
+        }
+        h1, h2, h3, h4, .roman-font {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .gold-border {
+            border: 2px solid #c5a059;
+        }
+        .btn-roman {
+            background-color: #8e2b2b; /* Imperial Red */
+            color: #fdfbf7;
+            transition: all 0.3s ease;
+        }
+        .btn-roman:hover {
+            background-color: #6d1f1f;
+            transform: translateY(-2px);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-[#2c2c2c] text-[#fdfbf7] p-4 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-xl md:text-2xl font-bold roman-font flex items-center gap-2">
+                <span>🏛️</span> THE VIRAL FORUM
+            </div>
+            <div class="hidden md:flex space-x-6 roman-font text-sm tracking-widest">
+                <a href="#about" class="hover:text-[#c5a059] transition-colors">ABOUT</a>
+                <a href="#metrics" class="hover:text-[#c5a059] transition-colors">METRICS</a>
+                <a href="#decrees" class="hover:text-[#c5a059] transition-colors">DECREES</a>
+                <a href="#sunday" class="hover:text-[#c5a059] transition-colors">THE GAMES</a>
+                <a href="#enlist" class="hover:text-[#c5a059] transition-colors">ENLIST</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
+                ☰
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#1a1a1a] p-4 mt-2 border-t border-[#c5a059]">
+            <a href="#about" class="block py-2 hover:text-[#c5a059]">ABOUT</a>
+            <a href="#metrics" class="block py-2 hover:text-[#c5a059]">METRICS</a>
+            <a href="#decrees" class="block py-2 hover:text-[#c5a059]">DECREES</a>
+            <a href="#sunday" class="block py-2 hover:text-[#c5a059]">THE GAMES</a>
+            <a href="#enlist" class="block py-2 hover:text-[#c5a059]">ENLIST</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-[#f4ebd0] border-b-4 border-[#c5a059] py-16 px-4 text-center relative overflow-hidden">
+        <div class="max-w-4xl mx-auto z-10 relative">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-[#8e2b2b]">Ave, Marketers!</h1>
+            <p class="text-lg md:text-xl text-gray-700 mb-8 italic">
+                "Expand thy networks. Conquer the algorithm. Respect the Senate."
+            </p>
+            <p class="max-w-2xl mx-auto mb-8 text-gray-800 leading-relaxed">
+                Welcome to the digital public square for Marketing, Advertising, and Tourism professionals. 
+                We are a legion of like-minded creators dedicated to sharing viral content and building alliances.
+            </p>
+            <button onclick="document.getElementById('enlist').scrollIntoView({behavior: 'smooth'})" class="btn-roman font-bold py-3 px-8 rounded shadow-lg roman-font tracking-widest border border-[#c5a059]">
+                JOIN THE LEGION
+            </button>
+        </div>
+        <!-- Decorative bg elements (CSS only) -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-[#8e2b2b] opacity-50"></div>
+        <div class="absolute bottom-0 left-0 w-full h-2 bg-[#8e2b2b] opacity-50"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-12 space-y-20">
+
+        <!-- Section 1: Intro/About -->
+        <section id="about" class="text-center max-w-3xl mx-auto">
+            <div class="mb-6 text-[#c5a059] text-4xl">📜</div>
+            <h2 class="text-3xl font-bold mb-6 text-[#2c2c2c] border-b-2 border-[#c5a059] inline-block pb-2">The Purpose of the Forum</h2>
+            <p class="text-lg text-gray-700 leading-loose">
+                We gather not to idle, but to grow. This group is a sanctuary for those who wish to expand their influence in the realms of 
+                <strong>Marketing</strong>, <strong>Advertising</strong>, and <strong>Tourism</strong>. 
+                Here, you will find allies, not just an audience.
+            </p>
+        </section>
+
+        <!-- Section 2: Metrics & Visualization -->
+        <section id="metrics" class="bg-white p-8 rounded-lg shadow-xl gold-border">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">The Spoils of Victory</h2>
+                <p class="text-gray-600">Why join our ranks? Behold the potential for growth and mastery.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- Chart 1: Radar Chart (Attributes) -->
+                <div class="flex flex-col items-center">
+                    <h3 class="text-xl font-bold mb-4 text-[#8e2b2b]">The Ideal Centurion</h3>
+                    <p class="text-sm text-gray-500 mb-2 text-center max-w-xs">We seek balanced warriors of the web.</p>
+                    <div class="chart-container">
+                        <canvas id="attributesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Line Chart (Network Growth) -->
+                <div class="flex flex-col items-center">
+                    <h3 class="text-xl font-bold mb-4 text-[#8e2b2b]">Projected Empire Expansion</h3>
+                    <p class="text-sm text-gray-500 mb-2 text-center max-w-xs">The power of weekly viral collaboration.</p>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center bg-gray-50 p-4 rounded border border-gray-200">
+                <p class="italic text-gray-700">"A single arrow is easily broken, but a bundle of arrows stands strong." — <span class="font-bold">The Power of Networking</span></p>
+            </div>
+        </section>
+
+        <!-- Section 3: The Decrees (Rules) -->
+        <section id="decrees">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">The V Decrees of Conduct</h2>
+                <p class="text-gray-600">Heed these rules, lest you be exiled to the digital wasteland.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
+                
+                <div class="bg-white p-6 rounded shadow-md card-hover gold-border relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-[#c5a059] text-white text-xs font-bold px-2 py-1">I</div>
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold mb-2 roman-font">Civility & Honor</h3>
+                    <p class="text-sm text-gray-600 mb-4">We march as one. Treat fellow Centurions with respect. Healthy debate is allowed; cruelty is not.</p>
+                    <div class="bg-gray-100 p-3 rounded text-xs text-gray-700 italic">
+                        "Respect the rank. Disrespect weakens the phalanx."
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded shadow-md card-hover gold-border relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-[#c5a059] text-white text-xs font-bold px-2 py-1">II</div>
+                    <div class="text-4xl mb-4">🏛️</div>
+                    <h3 class="text-xl font-bold mb-2 roman-font">The Sanctuary</h3>
+                    <p class="text-sm text-gray-600 mb-4">Barbarian attacks—bullying, hate speech, or degradation of identity—will not be tolerated.</p>
+                    <div class="bg-gray-100 p-3 rounded text-xs text-gray-700 italic border-l-4 border-[#8e2b2b]">
+                        "Treachery and hate lead to immediate exile."
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded shadow-md card-hover gold-border relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-[#c5a059] text-white text-xs font-bold px-2 py-1">III</div>
+                    <div class="text-4xl mb-4">⏳</div>
+                    <h3 class="text-xl font-bold mb-2 roman-font">The Sunday Truce</h3>
+                    <p class="text-sm text-gray-600 mb-4">Give more than you take. Self-promotion and spam are forbidden Monday through Saturday.</p>
+                    <div class="bg-gray-100 p-3 rounded text-xs text-gray-700 italic">
+                        "Hold your fire. Save your wares for the Sunday Games."
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded shadow-md card-hover gold-border relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-[#c5a059] text-white text-xs font-bold px-2 py-1">IV</div>
+                    <div class="text-4xl mb-4">🤐</div>
+                    <h3 class="text-xl font-bold mb-2 roman-font">Seal of Secrecy</h3>
+                    <p class="text-sm text-gray-600 mb-4">Trust is our shield. What is whispered in the war tent stays in the war tent.</p>
+                    <div class="bg-gray-100 p-3 rounded text-xs text-gray-700 italic">
+                        "Do not leak the councils of your fellow Legionnaires."
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded shadow-md card-hover gold-border relative overflow-hidden group border-2 border-[#8e2b2b]">
+                    <div class="absolute top-0 right-0 bg-[#8e2b2b] text-white text-xs font-bold px-2 py-1">V</div>
+                    <div class="text-4xl mb-4">🗝️</div>
+                    <h3 class="text-xl font-bold mb-2 roman-font text-[#8e2b2b]">The Mark of Entry</h3>
+                    <p class="text-sm text-gray-600 mb-4">To join, you must retrieve the Secret Code. Without it, the gates remain barred.</p>
+                    
+                    <a href="#enlist" class="block w-full text-center bg-[#2c2c2c] text-[#c5a059] font-bold py-2 rounded text-sm hover:bg-[#8e2b2b] hover:text-white transition-colors">
+                        RETRIEVE CODE
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 4: The Sunday Games -->
+        <section id="sunday" class="bg-[#2c2c2c] text-[#fdfbf7] p-8 md:p-12 rounded-lg shadow-2xl relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiLz48L3N2Zz4=');"></div>
+            
+            <div class="relative z-10 grid grid-cols-1 gap-12">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6 text-[#c5a059] roman-font">The Sunday Games</h2>
+                    <p class="text-lg mb-6 leading-relaxed">
+                        Once per week, on the day of the Sun, the gates of the arena open. 
+                        We invite <strong>Viral Content Creators</strong> to claim their time blocks and showcase their finest creations.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3">
+                            <span class="text-[#c5a059]">✦</span> Claim your 4-hour block.
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-[#c5a059]">✦</span> Link your business or content.
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-[#c5a059]">✦</span> Ignite viral trends across the network.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- The Grand Calendar -->
+                <div class="bg-white/10 p-6 rounded border border-white/20 backdrop-blur-sm">
+                    <h3 class="text-center mb-6 text-[#c5a059] text-lg tracking-widest roman-font">SUNDAY SCHEDULE - CLAIM YOUR BLOCK</h3>
+                    
+                    <!-- Legend -->
+                    <div class="grid grid-cols-3 gap-4 mb-8 text-sm">
+                        <div class="flex items-center gap-2 bg-[#c5a059] bg-opacity-30 p-3 rounded">
+                            <div class="w-4 h-4 rounded bg-[#c5a059]"></div>
+                            <span>MARKETING</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-[#8e2b2b] bg-opacity-30 p-3 rounded">
+                            <div class="w-4 h-4 rounded bg-[#8e2b2b]"></div>
+                            <span>ADVERTISEMENTS</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-green-600 bg-opacity-30 p-3 rounded">
+                            <div class="w-4 h-4 rounded bg-green-500"></div>
+                            <span>TOURISM</span>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-1 gap-3 mb-6">
+                        <!-- 6 AM - 10 AM: MARKETING -->
+                        <div class="calendar-block bg-[#c5a059] bg-opacity-20 border-l-4 border-[#c5a059] p-4 rounded cursor-pointer hover:bg-opacity-30 transition-colors" data-time="6AM-10AM" data-category="marketing">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-[#c5a059]">🎯 MARKETING HOUR</h4>
+                                    <p class="text-sm text-white">6:00 AM - 10:00 AM</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-white/70">Click to claim</p>
+                                    <span class="inline-block bg-[#c5a059] text-[#2c2c2c] text-xs font-bold px-2 py-1 rounded mt-1">AVAILABLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 10 AM - 2 PM: ADVERTISEMENTS -->
+                        <div class="calendar-block bg-[#8e2b2b] bg-opacity-20 border-l-4 border-[#8e2b2b] p-4 rounded cursor-pointer hover:bg-opacity-30 transition-colors" data-time="10AM-2PM" data-category="advertisements">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-[#f5a623]">📢 ADVERTISEMENTS HOUR</h4>
+                                    <p class="text-sm text-white">10:00 AM - 2:00 PM</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-white/70">Click to claim</p>
+                                    <span class="inline-block bg-[#8e2b2b] text-white text-xs font-bold px-2 py-1 rounded mt-1">AVAILABLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2 PM - 6 PM: TOURISM -->
+                        <div class="calendar-block bg-green-600 bg-opacity-20 border-l-4 border-green-500 p-4 rounded cursor-pointer hover:bg-opacity-30 transition-colors" data-time="2PM-6PM" data-category="tourism">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-green-400">✈️ TOURISM HOUR</h4>
+                                    <p class="text-sm text-white">2:00 PM - 6:00 PM</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-white/70">Click to claim</p>
+                                    <span class="inline-block bg-green-600 text-white text-xs font-bold px-2 py-1 rounded mt-1">AVAILABLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6 PM - 10 PM: MARKETING (2nd round) -->
+                        <div class="calendar-block bg-[#c5a059] bg-opacity-20 border-l-4 border-[#c5a059] p-4 rounded cursor-pointer hover:bg-opacity-30 transition-colors" data-time="6PM-10PM" data-category="marketing">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-[#c5a059]">🎯 MARKETING HOUR (Evening)</h4>
+                                    <p class="text-sm text-white">6:00 PM - 10:00 PM</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-white/70">Click to claim</p>
+                                    <span class="inline-block bg-[#c5a059] text-[#2c2c2c] text-xs font-bold px-2 py-1 rounded mt-1">AVAILABLE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-center text-white/70 text-sm italic">Click any block to reserve your time slot and link your business.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Enlistment (Interactive Form) -->
+        <section id="enlist" class="max-w-2xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4 roman-font">Petition for Citizenship</h2>
+                <p class="text-gray-600">Prepare your answers for the Gatekeepers (Admins).</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg shadow-xl gold-border">
+                <form id="enlistmentForm" class="space-y-6" onsubmit="event.preventDefault(); handleEnlistment();">
+                    
+                    <!-- Question 1 -->
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">I. Why do you want to join this Legion?</label>
+                        <textarea id="q1" rows="3" class="w-full p-3 border border-gray-300 rounded focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none" placeholder="Speak your mind..."></textarea>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">II. Will you obey the Administration?</label>
+                        <select id="q2" class="w-full p-3 border border-gray-300 rounded focus:border-[#c5a059] outline-none">
+                            <option value="">Select your pledge...</option>
+                            <option value="yes">Yes, I pledge my loyalty.</option>
+                            <option value="no">No, I am a barbarian.</option>
+                        </select>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">III. Are you a spamming Automaton?</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="q3" value="human" class="accent-[#8e2b2b]">
+                                <span>Nay, I am Human</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="q3" value="bot" class="accent-[#8e2b2b]">
+                                <span>Beep Boop (I am AI)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full btn-roman font-bold py-3 rounded text-lg shadow mt-4">
+                        SUBMIT PETITION
+                    </button>
+                </form>
+
+                <!-- Feedback Area -->
+                <div id="formFeedback" class="hidden mt-6 p-4 rounded text-center border">
+                    <!-- Dynamic JS content -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#1a1a1a] text-[#888] py-8 text-center text-sm">
+        <p class="mb-2 roman-font text-[#c5a059]">THE VIRAL FORUM</p>
+        <p>Est. 2024 • Respect Meta's Decrees • Connect & Conquer</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Navigation Logic ---
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                mobileMenu.classList.add('hidden'); // Close mobile menu on click
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // --- Chart.js Implementations ---
+        
+        // 1. Attributes Radar Chart
+        const ctxAttr = document.getElementById('attributesChart').getContext('2d');
+        const attrChart = new Chart(ctxAttr, {
+            type: 'radar',
+            data: {
+                labels: ['Creativity', 'Networking', 'Strategy', 'Consistency', 'Humor', 'Analytics'],
+                datasets: [{
+                    label: 'Ideal Creator Profile',
+                    data: [90, 85, 80, 95, 70, 75],
+                    backgroundColor: 'rgba(197, 160, 89, 0.2)', // Gold transparent
+                    borderColor: '#c5a059',
+                    pointBackgroundColor: '#8e2b2b',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        ticks: { display: false },
+                        grid: { color: 'rgba(0,0,0,0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 2. Growth Line Chart
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        const growthChart = new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'],
+                datasets: [{
+                    label: 'Network Reach (People)',
+                    data: [50, 120, 300, 850, 2000, 5000], // Exponential growth mock data
+                    borderColor: '#8e2b2b', // Red
+                    backgroundColor: 'rgba(142, 43, 43, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [5, 5] }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: true, position: 'bottom' }
+                }
+            }
+        });
+
+        // 3. Weekly Schedule Bar Chart
+        const ctxSchedule = document.getElementById('scheduleChart').getContext('2d');
+        const scheduleChart = new Chart(ctxSchedule, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'SUN'],
+                datasets: [{
+                    label: 'Allowed Posting Volume',
+                    data: [10, 10, 10, 10, 20, 30, 100], // Sunday spike
+                    backgroundColor: [
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.5)',
+                        '#c5a059' // Gold for Sunday
+                    ],
+                    borderColor: 'transparent',
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        display: false,
+                        beginAtZero: true
+                    },
+                    x: {
+                        ticks: { color: '#fdfbf7' },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw + '% Activity Level';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Calendar Block Interaction Logic ---
+        const calendarBlocks = document.querySelectorAll('.calendar-block');
+        
+        calendarBlocks.forEach(block => {
+            block.addEventListener('click', function() {
+                const time = this.getAttribute('data-time');
+                const category = this.getAttribute('data-category');
+                
+                // Check if already claimed
+                const status = this.querySelector('span').innerText;
+                if (status.includes('CLAIMED')) {
+                    alert('This block has already been claimed. Try another time slot!');
+                    return;
+                }
+                
+                openCalendarModal(time, category);
+            });
+        });
+
+        function openCalendarModal(time, category) {
+            const businessName = prompt(`🏆 Reserve your ${category.toUpperCase()} block: ${time}\n\nEnter your business name:`);
+            
+            if (!businessName) return;
+            
+            const businessLink = prompt('Paste your business link (URL or Facebook page):');
+            
+            if (!businessLink) return;
+
+            // Update the UI (in a real app, this would save to a database)
+            const block = document.querySelector(`[data-time="${time}"]`);
+            const status = block.querySelector('span');
+            const categoryColors = {
+                'marketing': ['bg-[#c5a059]', 'text-[#2c2c2c]'],
+                'advertisements': ['bg-[#8e2b2b]', 'text-white'],
+                'tourism': ['bg-green-600', 'text-white']
+            };
+
+            const [bgColor, textColor] = categoryColors[category];
+            status.className = `inline-block ${bgColor} ${textColor} text-xs font-bold px-2 py-1 rounded mt-1`;
+            status.innerText = 'CLAIMED';
+
+            // Add business info
+            const flex = block.querySelector('.flex');
+            flex.innerHTML += `
+                <div class="text-right mt-2">
+                    <p class="text-xs font-bold text-white mt-2">${businessName}</p>
+                    <a href="${businessLink}" target="_blank" class="text-xs text-[#c5a059] hover:underline">View Business</a>
+                </div>
+            `;
+
+            alert(`✅ Success! Your ${category} block for ${time} has been reserved!\n\nBusiness: ${businessName}\nLink: ${businessLink}`);
+        }
+
+        // --- Interaction Logic (Form Handling) ---
+        function handleEnlistment() {
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3Radios = document.getElementsByName('q3');
+            let q3 = '';
+            for (const radio of q3Radios) {
+                if (radio.checked) {
+                    q3 = radio.value;
+                    break;
+                }
+            }
+
+            const feedbackEl = document.getElementById('formFeedback');
+            feedbackEl.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800', 'border-red-300', 'border-green-300');
+
+            // Validation
+            if (!q1 || !q2 || !q3) {
+                feedbackEl.innerHTML = "<strong>Halt!</strong> You must answer all questions, citizen.";
+                feedbackEl.classList.add('bg-red-100', 'text-red-800', 'border-red-300');
+                return;
+            }
+
+            // Logic check
+            if (q2 === 'no') {
+                feedbackEl.innerHTML = "<strong>Treason!</strong> We cannot accept those who defy the Senate.";
+                feedbackEl.classList.add('bg-red-100', 'text-red-800', 'border-red-300');
+                return;
+            }
+
+            if (q3 === 'bot') {
+                feedbackEl.innerHTML = "<strong>Begone, Automaton!</strong> Only humans may enter these gates.";
+                feedbackEl.classList.add('bg-red-100', 'text-red-800', 'border-red-300');
+                return;
+            }
+
+            // Success
+            feedbackEl.innerHTML = `
+                <div class="text-2xl mb-2">🎉 Ave! 🎉</div>
+                <p>Your answers are wise. You are ready to petition the main gate.</p>
+                <p class="text-sm mt-2">Go forth to the Facebook group and paste these answers.</p>
+            `;
+            feedbackEl.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+            
+            // Confetti effect (simple visual cue)
+            const btn = document.querySelector('#enlist button');
+            btn.innerText = "Access Granted";
+            btn.classList.add('bg-green-700', 'hover:bg-green-800');
+            btn.classList.remove('btn-roman');
+        }
+
+    </script>
+</body>
+</html>
