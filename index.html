@@ -640,18 +640,41 @@
             }
 
             // Success
+            const accessCode = generateAccessCode();
             feedbackEl.innerHTML = `
-                <div class="text-2xl mb-2">🎉 Ave! 🎉</div>
-                <p>Your answers are wise. You are ready to petition the main gate.</p>
-                <p class="text-sm mt-2">Go forth to the Facebook group and paste these answers.</p>
+                <div class="text-2xl mb-4">🎉 Ave Legionnaire! 🎉</div>
+                <p class="mb-4 font-bold text-lg">Your petition has been accepted!</p>
+                
+                <div class="bg-[#8e2b2b] text-white p-4 rounded mb-4 border-2 border-[#c5a059]">
+                    <p class="text-xs text-white/70 mb-2">YOUR ACCESS CODE</p>
+                    <p class="text-2xl font-bold tracking-wider roman-font">${accessCode}</p>
+                    <p class="text-xs text-white/70 mt-2">Copy this code and use it when joining the Facebook group</p>
+                </div>
+                
+                <p class="text-sm mb-2"><strong>Next Step:</strong> Join our Facebook group and provide this code to the Gatekeepers for verification.</p>
+                <a href="https://www.facebook.com/groups/YOUR-GROUP-ID/" target="_blank" class="inline-block bg-[#8e2b2b] text-white font-bold py-2 px-6 rounded hover:bg-[#c5a059] transition-colors mt-3">
+                    JOIN FACEBOOK GROUP
+                </a>
             `;
             feedbackEl.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
             
-            // Confetti effect (simple visual cue)
+            // Disable form after submission
+            document.getElementById('enlistmentForm').style.opacity = '0.5';
+            document.getElementById('enlistmentForm').style.pointerEvents = 'none';
+            
+            // Update button
             const btn = document.querySelector('#enlist button');
-            btn.innerText = "Access Granted";
+            btn.innerText = "✓ Petition Submitted";
             btn.classList.add('bg-green-700', 'hover:bg-green-800');
             btn.classList.remove('btn-roman');
+            btn.disabled = true;
+        }
+
+        // Generate a unique access code
+        function generateAccessCode() {
+            const timestamp = Date.now().toString(36).toUpperCase();
+            const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
+            return `${randomPart}-${timestamp}`;
         }
 
     </script>
