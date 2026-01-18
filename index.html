@@ -647,7 +647,12 @@
                 
                 <div class="bg-[#8e2b2b] text-white p-4 rounded mb-4 border-2 border-[#c5a059]">
                     <p class="text-xs text-white/70 mb-2">YOUR ACCESS CODE</p>
-                    <p class="text-2xl font-bold tracking-wider roman-font">${accessCode}</p>
+                    <div class="flex items-center justify-center gap-3">
+                        <p id="accessCodeDisplay" class="text-2xl font-bold tracking-wider roman-font">${accessCode}</p>
+                        <button onclick="copyAccessCode('${accessCode}')" class="bg-[#c5a059] hover:bg-[#a68847] text-[#2c2c2c] font-bold py-2 px-3 rounded text-sm transition-colors">
+                            📋 COPY
+                        </button>
+                    </div>
                     <p class="text-xs text-white/70 mt-2">Copy this code and use it when joining the Facebook group</p>
                 </div>
                 
@@ -675,6 +680,25 @@
             const timestamp = Date.now().toString(36).toUpperCase();
             const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
             return `${randomPart}-${timestamp}`;
+        }
+
+        // Copy access code to clipboard
+        function copyAccessCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = '✓ COPIED!';
+                btn.classList.add('bg-green-600', 'hover:bg-green-700');
+                btn.classList.remove('bg-[#c5a059]', 'hover:bg-[#a68847]');
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    btn.classList.add('bg-[#c5a059]', 'hover:bg-[#a68847]');
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy code. Please try again.');
+            });
         }
 
     </script>
